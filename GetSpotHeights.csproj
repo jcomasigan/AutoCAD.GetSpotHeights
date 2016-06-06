@@ -86,6 +86,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
     </Reference>
@@ -101,8 +103,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetSpotHeightForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetSpotHeightForm.Designer.cs">
+      <DependentUpon>GetSpotHeightForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SpotHeights.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -112,6 +121,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GetSpotHeightForm.resx">
+      <DependentUpon>GetSpotHeightForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SpotHeights.resx">
       <DependentUpon>SpotHeights.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>

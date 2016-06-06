@@ -8,3 +8,15 @@ C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeights\GetSpotHei
 C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeights\GetSpotHeights\obj\Debug\GetSpotHeights.csproj.GenerateResource.Cache
 C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeights\GetSpotHeights\obj\Debug\GetSpotHeights.dll
 C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeights\GetSpotHeights\obj\Debug\GetSpotHeights.pdb
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\bin\Debug\GetSpotHeights.dll
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\bin\Debug\GetSpotHeights.pdb
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\bin\Debug\PresentationCore.dll
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\bin\Debug\AcTcMgd.dll
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\bin\Debug\AcCui.dll
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.csprojResolveAssemblyReference.cache
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.GetSpotHeightForm.resources
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.MyCommands.resources
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.csproj.GenerateResource.Cache
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.dll
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.pdb
+C:\Users\Jericho Masigan\Documents\Programming\AutoCAD.GetSpotHeight\GetSpotHeights\obj\Debug\GetSpotHeights.g.resources

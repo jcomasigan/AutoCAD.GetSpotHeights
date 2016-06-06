@@ -1,0 +1,215 @@
+﻿                ObjectId insertedBlockId;
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    DBObject obj = tr.GetObject(prmtEnt.ObjectId, OpenMode.ForRead);
+                    Polyline3d polyline = obj as Polyline3d;
+                    if (polyline != null)
+                    {
+                        foreach (ObjectId id in polyline)
+                        {
+                            PolylineVertex3d vertex = tr.GetObject(id, OpenMode.ForRead) as PolylineVertex3d;
+                            BlockTable blockTable = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                            if (blockTable.Has("HOBLEV1"))
+                            {
+                                BlockTableRecord blockTableRecord = blockTable["HOBLEV1"].GetObject(OpenMode.ForRead) as BlockTableRecord;
+                                if (blockTable != null)
+                                {
+                                    using (BlockReference spotHeight = new BlockReference(vertex.Position, blockTableRecord.ObjectId))
+                                    {
+                                        BlockTableRecord blocktableRec = tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+                                        blocktableRec.AppendEntity(spotHeight);
+                                        tr.AddNewlyCreatedDBObject(spotHeight, true);
+                                        insertedBlockId = spotHeight.ObjectId;
+                                        foreach (ObjectId attrID in blockTableRecord)
+                                        {
+                                            DBObject atttObj = attrID.GetObject(OpenMode.ForRead);
+                                            AttributeDefinition attrib = atttObj as AttributeDefinition;
+                                            if ((attrib != null) && (!attrib.Constant))
+                                            {
+                                                using (AttributeReference attributeRef = new AttributeReference())
+                                                {
+                                                    attributeRef.SetAttributeFromBlock(attrib, spotHeight.BlockTransform);
+                                                    attributeRef.TextString = Decimal.Round(Convert.ToDecimal(spotHeight.Position.Z), 2, MidpointRounding.AwayFromZero).ToString();
+
+                                                    spotHeight.AttributeCollection.AppendAttribute(attributeRef);
+                                                    tr.AddNewlyCreatedDBObject(attributeRef, true);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ed.WriteMessage("\n\n Block HOBLEV1 does not exist in the drawing.");
+                            }
+                        }
+                        tr.Commit();
+                    }
+                }
+
+
+
+
+				using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GetSpotHeights
+{
+    public partial class GetSpotHeightForm : Form
+    {
+        string attributeTagName = "";
+        string blockName = "";
+        double blockScale = 1;
+        PromptEntityResult prmtEnt;
+
+        public GetSpotHeightForm(PromptEntityResult prmtEntIncoming)
+        {
+            InitializeComponent();
+            prmtEnt = prmtEntIncoming;
+        }
+
+        private void plotButton_Click(object sender, EventArgs e)
+        {
+            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            Database db = doc.Database;
+            Database blockDB = new Database(true, true);
+            ObjectId insertedBlockId;
+            try
+            {
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    DBObject obj = tr.GetObject(prmtEnt.ObjectId, OpenMode.ForRead);
+                    Polyline3d polyline = obj as Polyline3d;
+                    if (polyline != null)
+                    {
+                        int i = 0;
+                        List<ObjectId> vertices = new List<ObjectId>();
+                        foreach(ObjectId id in polyline)
+                        {
+                            vertices.Add(id);
+                        }
+                        foreach (ObjectId id in polyline)
+                        {
+                                                      
+                            PolylineVertex3d vertex = tr.GetObject(id, OpenMode.ForRead) as PolylineVertex3d;
+                            BlockTable blockTable = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                            if (blockTable.Has(blockName))
+                            {
+                                BlockTableRecord blockTableRecord = blockTable[blockName].GetObject(OpenMode.ForRead) as BlockTableRecord;
+                                if (blockTable != null)
+                                {
+                                    GetLength(ver)
+                                    using (BlockReference spotHeight = new BlockReference(vertex.Position, blockTableRecord.ObjectId))
+                                    {
+                                        using (DocumentLock doclock = doc.LockDocument())
+                                        {
+                                            spotHeight.ScaleFactors = new Autodesk.AutoCAD.Geometry.Scale3d(blockScale, blockScale, blockScale);
+                                            BlockTableRecord blocktableRec = tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite) as BlockTableRecord;
+                                            blocktableRec.AppendEntity(spotHeight);
+                                            tr.AddNewlyCreatedDBObject(spotHeight, true);
+                                            insertedBlockId = spotHeight.ObjectId;
+                                            foreach (ObjectId attrID in blockTableRecord)
+                                            {
+                                                DBObject atttObj = attrID.GetObject(OpenMode.ForRead);
+                                                AttributeDefinition attrib = atttObj as AttributeDefinition;
+                                                if ((attrib != null) && (!attrib.Constant))
+                                                {
+                                                    using (AttributeReference attributeRef = new AttributeReference())
+                                                    {
+                                                        attributeRef.SetAttributeFromBlock(attrib, spotHeight.BlockTransform);
+                                                        attributeRef.TextString = Decimal.Round(Convert.ToDecimal(spotHeight.Position.Z), 2, MidpointRounding.AwayFromZero).ToString();
+
+                                                        spotHeight.AttributeCollection.AppendAttribute(attributeRef);
+                                                        tr.AddNewlyCreatedDBObject(attributeRef, true);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ed.WriteMessage("\n\n Block HOBLEV1 does not exist in the drawing.");
+                            }
+                        }
+                        tr.Commit();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private Point3d GetLength(Point3d ptStart, Point3d ptEnd)
+        {
+            double interval = 5;
+            LineSegment3d segment  = new LineSegment3d(ptStart, ptEnd);
+            Point3d pt = segment.EvaluatePoint(interval / segment.Length);
+            return pt;
+        }
+        private void blockDwgBtn_Click(object sender, EventArgs e)
+        {
+            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            Editor ed = doc.Editor;
+            Database db = doc.Database;
+            PromptEntityOptions prmtOpt = new PromptEntityOptions("\n\nSelect block");
+
+            prmtOpt.SetRejectMessage("\n\nCan only select a block definition");
+            prmtOpt.AddAllowedClass(typeof(BlockReference), false);
+            PromptEntityResult result = ed.GetEntity(prmtOpt);
+            if(result.Status == PromptStatus.OK)
+            {
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    BlockReference blkReference = tr.GetObject(result.ObjectId, OpenMode.ForRead) as BlockReference;
+                    BlockTableRecord blockRecord = null;
+                    if(blkReference.IsDynamicBlock)
+                    {
+                        blockRecord = tr.GetObject(blkReference.DynamicBlockTableRecord, OpenMode.ForRead) as BlockTableRecord;                        
+                    }
+                    else
+                    {
+                        blockRecord = tr.GetObject(blkReference.BlockTableRecord, OpenMode.ForRead) as BlockTableRecord;
+                    }
+                    blockName = blockRecord.Name;
+                    blockDwgBtn.Text = blockRecord.Name;
+                    this.Focus();
+                    plotButton.Enabled = true;
+                }
+            }
+        }
+
+        private void blockScaleTxtBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void blockScaleTxtBox_Leave(object sender, EventArgs e)
+        {
+            if(double.TryParse(blockScaleTxtBox.Text, out blockScale))
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Invalid input");
+            }
+        }
+    }
+}
